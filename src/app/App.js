@@ -5,8 +5,9 @@ import { HashRouter, Route} from "react-router-dom";
 import {Provider} from 'react-redux';
 
 import appStore from './store'
-import Home from './components/Home';
+
 import FileExplorer from './components/file_explorer/FileExplorer';
+import { Home } from './components/Home';
 
 export default class App extends Component {
 

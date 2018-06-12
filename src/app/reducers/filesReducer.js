@@ -10,7 +10,9 @@ export default function(state = initialState, action) {
     switch(action.type){
 
         case FETCH_FILES:
-            return state;
+            return {
+                files: action.payload
+            };
 
         case CREATE_FILE:
             return state;

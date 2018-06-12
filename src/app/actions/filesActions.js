@@ -3,6 +3,8 @@ import { FETCH_FILES, CREATE_FILE, UPDATE_FILE, DELETE_FILE} from './types';
 import { config } from './../../config';
 
 export function fetchFiles(folder){
+    folder = folder || '';
+    
     console.log('Feetching files for ' + folder);
 
     return function(dispatch){

@@ -22,20 +22,30 @@ var config = {
                 
             },
             {
-                test: /\.sass$/,
+                test: /\.(sass|scss)$/,
                 exclude: /node_modules/,
                 use: [
-                  {
-                    loader: "style-loader" // creates style nodes from JS strings
-                  },
-                  {
-                    loader: "css-loader" // translates CSS into CommonJS
-                  },
-                  {
-                    loader: "sass-loader" // compiles Sass to CSS
-                  }
+                    {
+                        loader: "style-loader" // creates style nodes from JS strings
+                    },
+                    {
+                        loader: "css-loader" // translates CSS into CommonJS
+                    },
+                    {
+                        loader: "sass-loader" // compiles Sass to CSS
+                    }
                 ]
-              }
+            },
+            { 
+                test: /\.(jpe?g|png|gif|svg)$/,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'file-loader'
+                    }
+                    
+                ]
+            }, 
         ]
     },
 
