@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import { PropTypes } from 'prop-types';
 
 import { setSelectedFile } from '../../actions/filesActions';
+import { fetchFiles } from './../../actions/filesActions';
+
 import folderIcon from './../../../assets/images/icon-folder-black.svg'
 
 class FileTypeGrid extends Component {
@@ -13,7 +15,14 @@ class FileTypeGrid extends Component {
 
     onFileClick(e){
         //this.props.onFileClick(this.props.file)
-        this.props.setSelectedFile(this.props.file);
+
+        if(this.props.fileSelected && this.props.fileSelected.fileId == this.props.file.fileId && this.props.file.type == 'folder'){
+            this.props.fetchFiles(this.props.fileSelected);
+        }else{
+            this.props.setSelectedFile(this.props.file);
+        }
+
+        
     }
 
     render() {
@@ -39,4 +48,4 @@ const mapStateToProps = function(state){
     }
 }
 
-export default connect(mapStateToProps, {setSelectedFile} )(FileTypeGrid);
+export default connect(mapStateToProps, {setSelectedFile, fetchFiles} )(FileTypeGrid);

@@ -2,17 +2,18 @@
 import { FETCH_FILES, CREATE_FILE, UPDATE_FILE, DELETE_FILE, SET_SELECTED_FILE} from './types';
 import { config } from './../../config';
 
-export function fetchFiles(folder){
-    folder = folder || '';
+export function fetchFiles(fileFolder){
+    var path = (fileFolder) ? fileFolder.fileId : '';
     
-    console.log('Feetching files for ' + folder);
+    console.log('Feetching files for ' + path);
 
     return function(dispatch){
-        fetch(config.API_HOST + 'files/' + folder)
+        fetch(config.API_HOST + 'files/' + path)
         .then(res => res.json())
         .then(files => dispatch({
             type: FETCH_FILES,
-            payload: files
+            payload: files,
+            parentFolder: fileFolder
         }));
     }
 }

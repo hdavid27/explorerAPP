@@ -24,17 +24,17 @@ class FileExplorer extends Component {
         super(props);
 
         this.state = {
-            viewType: VIEW_TYPE_GRID,
-            pathArray: [
-                {id:'root', name:'root'}
-            ],
-            fileSelected: {}
+            viewType: VIEW_TYPE_GRID
+            // pathArray: [
+            //     {id:'root', name:'root'}
+            // ],
+            //fileSelected: {}
         }
 
     }
 
     componentWillMount(){
-        this.searchFiles(this.state.pathArray);
+        this.props.fetchFiles();
     }
 
     componentWillReceiveProps(nextProps){
@@ -54,23 +54,13 @@ class FileExplorer extends Component {
 
     }
 
-    onPathElementClick(id, path){
-        console.log('onPathElementClick: ' + id + ':' + path);
+    onPathElementClick(id, name){
+        console.log('onPathElementClick: ' + id + ':' + name);
 
-        let filtered = false;
-        let array = this.state.pathArray.filter(function(path){
-            if(path.id == id){
-                filtered = !filtered;
-                return true;
-            }
-            return !filtered
+        this.props.fetchFiles({
+            fileId: id,
+            name: name
         });
-
-        this.setState({
-            pathArray: array
-        });
-
-        this.searchFiles(array)
 
     }
 
@@ -83,28 +73,20 @@ class FileExplorer extends Component {
     }
 
     onFolderClick(file){
-        var array = this.state.pathArray;
-        array.push({id:file.fileId, name: file.name});
+        // var array = this.state.pathArray;
+        // array.push({id:file.fileId, name: file.name});
 
-        this.setState({
-            pathArray: array
-        });
+        // this.setState({
+        //     pathArray: array
+        // });
 
-        this.searchFiles(array)
+        // this.searchFiles(array)
     }
-
-    searchFiles(pathArray){
-        var length = pathArray.length
-        if(length > 0){
-            this.props.fetchFiles(pathArray[length-1].id);
-        }
-    }
-
 
     render() {
 
-        const pathElements = this.state.pathArray.map((ele, index) =>(
-            <PathElement key={ele.id} pathElement={ele} selectedClass={(index == this.state.pathArray.length -1) ? "selected" : ""} onPathElementClick={this.onPathElementClick.bind(this)}></PathElement>
+        const pathElements = this.props.pathArray.map((ele, index) =>(
+            <PathElement key={ele.id} pathElement={ele} selectedClass={(index == this.props.pathArray.length -1) ? "selected" : ""} onPathElementClick={this.onPathElementClick.bind(this)}></PathElement>
         ));
 
         var viewTypeElement;
@@ -113,17 +95,17 @@ class FileExplorer extends Component {
         switch(this.state.viewType){
             case VIEW_TYPE_GRID:
                 viewTypeButton = <ImageButton imageSrc={viewGridIcon} onButtonClick={this.onViewTypeClick.bind(this)}></ImageButton>
-                viewTypeElement = <ViewTypeGrid files={this.props.files} fileSelected={this.state.fileSelected} onFolderClick={this.onFolderClick.bind(this)}></ViewTypeGrid>;
+                viewTypeElement = <ViewTypeGrid files={this.props.files} ></ViewTypeGrid>;
                 break;
 
             case VIEW_TYPE_LIST:
                 viewTypeButton = <ImageButton imageSrc={viewListIcon} onButtonClick={this.onViewTypeClick.bind(this)}></ImageButton>
-                viewTypeElement = <ViewTypeList files={this.props.files} fileSelected={this.state.fileSelected} onFolderClick={this.onFolderClick.bind(this)}></ViewTypeList>
+                viewTypeElement = <ViewTypeList files={this.props.files} ></ViewTypeList>
                 break;
 
             default:
                 viewTypeButton = <ImageButton imageSrc={viewGridIcon} onButtonClick={this.onViewTypeGridClick.bind(this)}></ImageButton>
-                viewTypeElement = <ViewTypeGrid files={this.props.files} fileSelected={this.state.fileSelected} onFolderClick={this.onFolderClick.bind(this)}></ViewTypeGrid>;
+                viewTypeElement = <ViewTypeGrid files={this.props.files} ></ViewTypeGrid>;
                 break;
         }
 
@@ -151,13 +133,15 @@ class FileExplorer extends Component {
 
 FileExplorer.protoTypes = {
     fetchFiles: PropTypes.func.isRequired,
-    files: PropTypes.array.isRequired
+    files: PropTypes.array.isRequired,
+    pathArray: PropTypes.array.isRequired
 }
 
 const mapStateToProps = function(state){
     console.log('STATE', state);
     return {
-        files: state.filesReducer.files
+        files: state.filesReducer.files,
+        pathArray: state.filesReducer.pathArray
     }
 }
 

@@ -15,18 +15,18 @@ export default class ViewTypeGrid extends Component {
 
     onFileClick(file){
         
-        if(this.props.fileSelected && this.props.fileSelected.fileId == file.fileId && file.type == 'folder'){
-            this.props.onFolderClick(file);
-        }else{
-            //this.props.setSelectedFile(file);
-        }
+        // if(this.props.fileSelected && this.props.fileSelected.fileId == file.fileId && file.type == 'folder'){
+        //     this.props.onFolderClick(file);
+        // }else{
+        //     //this.props.setSelectedFile(file);
+        // }
 
     }
 
     render(){
 
         const files = this.props.files.map((file, index) => (
-            <FileTypeGrid key={index} file={file} onFileClick={this.onFileClick.bind(this)} ></FileTypeGrid>
+            <FileTypeGrid key={index} file={file} ></FileTypeGrid>
         ));
         
         return (
