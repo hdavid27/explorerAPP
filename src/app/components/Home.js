@@ -9,7 +9,7 @@ export const Home = (props) =>  {
         
             <h1>Explorer App</h1>
 
-            <h4><Link className="" to="/fileexplorer">Explore me!</Link></h4>
+            <h4><Link className="" to="/fileexplorer">Explore!</Link></h4>
 
         </div>
     )
