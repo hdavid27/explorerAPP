@@ -1,15 +1,13 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const path = require("path");
-
-var DIST_DIR = path.resolve(__dirname, "/dist");
-var SRC_DIR = path.resolve(__dirname, "/src");
 
 var config = {
 
     entry:"./src/index.js",
     output: {
-        path: DIST_DIR,
-        filename: "main.js",
+        path: path.resolve(__dirname, "dist"),
+        filename: "bundle.js",
     },
     module: {
         rules: [
@@ -50,6 +48,7 @@ var config = {
     },
 
     plugins: [
+        new CleanWebpackPlugin(['dist']),
         new HtmlWebpackPlugin({
             template: './src/index.html'
         })
