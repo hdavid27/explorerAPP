@@ -1,25 +1,24 @@
 
 import React, { Component } from 'react'
+import {connect} from 'react-redux';
+import { PropTypes } from 'prop-types';
+
 import FileTypeGrid from './FileTypeGrid';
+import { setSelectedFile } from '../../actions/filesActions';
 
 export default class ViewTypeGrid extends Component {
 
     constructor(props){
         super(props)
         
-        this.state = {
-            fileSelected: {}
-        }
     }
 
     onFileClick(file){
         
-        if(this.state.fileSelected && this.state.fileSelected.fileId == file.fileId && file.type == 'folder'){
+        if(this.props.fileSelected && this.props.fileSelected.fileId == file.fileId && file.type == 'folder'){
             this.props.onFolderClick(file);
         }else{
-            this.setState({
-                fileSelected: file
-            });
+            //this.props.setSelectedFile(file);
         }
 
     }
@@ -27,7 +26,7 @@ export default class ViewTypeGrid extends Component {
     render(){
 
         const files = this.props.files.map((file, index) => (
-            <FileTypeGrid key={index} file={file} fileSelected={this.state.fileSelected} onFileClick={this.onFileClick.bind(this)} ></FileTypeGrid>
+            <FileTypeGrid key={index} file={file} onFileClick={this.onFileClick.bind(this)} ></FileTypeGrid>
         ));
         
         return (

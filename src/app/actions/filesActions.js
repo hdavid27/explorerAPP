@@ -1,5 +1,5 @@
 
-import { FETCH_FILES, CREATE_FILE, UPDATE_FILE, DELETE_FILE} from './types';
+import { FETCH_FILES, CREATE_FILE, UPDATE_FILE, DELETE_FILE, SET_SELECTED_FILE} from './types';
 import { config } from './../../config';
 
 export function fetchFiles(folder){
@@ -81,4 +81,18 @@ export function deleteFile(fileId){
             payload: result
         }))
     }
+}
+
+export function setSelectedFile(file){
+    console.log('Seting selected file...');
+
+    return function(dispatch){
+
+        dispatch({
+            type: SET_SELECTED_FILE,
+            payload: file
+        });
+
+    }
+    
 }
