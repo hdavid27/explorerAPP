@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import { PropTypes } from 'prop-types';
 
-import { setSelectedFile, fetchFiles } from '../../actions/filesActions';
+import { setSelectedFile, fetchFiles } from '../../../actions/filesActions';
 
-import folderIcon from './../../../assets/images/icon-folder-black.svg'
-import fileIcon from './../../../assets/images/icon-file-black.svg'
+import folderIcon from './../../../../assets/images/icon-folder-black.svg'
+import fileIcon from './../../../../assets/images/icon-file-black.svg'
 
 class FileTypeGrid extends Component {
 

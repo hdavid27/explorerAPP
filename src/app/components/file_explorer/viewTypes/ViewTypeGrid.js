@@ -3,8 +3,7 @@ import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import { PropTypes } from 'prop-types';
 
-import FileTypeGrid from './FileTypeGrid';
-import { setSelectedFile } from '../../actions/filesActions';
+import FileTypeGrid from './../fileTypes/FileTypeGrid';
 
 export default class ViewTypeGrid extends Component {
 

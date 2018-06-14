@@ -6,7 +6,8 @@ const initialState = {
     fileSelected: {},
     pathArray: [
         {id:'root', name:'root'}
-    ]
+    ],
+    offset: 0
 };
 
 export default function(state = initialState, action) {
@@ -14,7 +15,7 @@ export default function(state = initialState, action) {
     switch(action.type){
 
         case FETCH_FILES:
-        console.log('FETCH_FILES: ' + action.status, action.payload);
+        console.log('FETCH_FILES: ' + action.status, action.parentFolder, action.payload);
 
             if(action.status <= 300){
                 var array = state.pathArray;
@@ -37,7 +38,8 @@ export default function(state = initialState, action) {
                 return {
                     files: action.payload,
                     fileSelected: {},
-                    pathArray: array
+                    pathArray: array,
+                    offset: action.offset
                 };
             }else{
                 return state;
@@ -53,13 +55,15 @@ export default function(state = initialState, action) {
                 return {
                     files: array,
                     fileSelected: {},
-                    pathArray: state.pathArray
+                    pathArray: state.pathArray,
+                    offset: state.offset
                 };
             }else{
                 return {
                     files: state.files,
                     fileSelected: {},
-                    pathArray: state.pathArray
+                    pathArray: state.pathArray,
+                    offset: state.offset
                 }; 
             }
             
@@ -77,7 +81,8 @@ export default function(state = initialState, action) {
                 return {
                     files: array,
                     fileSelected: {},
-                    pathArray: state.pathArray
+                    pathArray: state.pathArray,
+                    offset: state.offset
                 };
             }else{
                 return state;
@@ -96,7 +101,8 @@ export default function(state = initialState, action) {
                 return {
                     files: array,
                     fileSelected: {},
-                    pathArray: state.pathArray
+                    pathArray: state.pathArray,
+                    offset: state.offset
                 };
             }else{
                 return state;
@@ -106,7 +112,8 @@ export default function(state = initialState, action) {
             return {
                 files: state.files,
                 fileSelected: action.payload,
-                pathArray: state.pathArray
+                pathArray: state.pathArray,
+                offset: state.offset
             };
 
         default:

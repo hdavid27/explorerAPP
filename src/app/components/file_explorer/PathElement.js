@@ -18,8 +18,8 @@ export default class PathElement extends Component {
 
     render(){
         return (
-            <div className="pathElement">
-                <b>/</b> <p onClick={this.onClick.bind(this)} > {this.state.pathElement.name} </p>
+            <div className="pathElement" onClick={this.onClick.bind(this)}>
+                <b>/</b> <p> {this.state.pathElement.name} </p>
             </div>
         )
     };

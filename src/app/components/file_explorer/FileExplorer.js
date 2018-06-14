@@ -14,13 +14,16 @@ import createFileIcon from './../../../assets/images/icon-add-file-black.svg';
 import createFolderIcon from './../../../assets/images/icon-create-folder-black.svg';
 import viewGridIcon from './../../../assets/images/icon-view-grid-back.svg';
 import viewListIcon from './../../../assets/images/icon-view-list-black.svg';
+import nextIcon from './../../../assets/images/icon-forward-black.svg';
+import backIcon from './../../../assets/images/icon-back-black.svg';
 
 
 import PathElement from './PathElement';
-import { ImageButton } from './ImageButton';
-import ViewTypeGrid from './ViewTypeGrid';
-import ViewTypeList from './ViewTypeList';
+import { ImageButton } from './buttons/ImageButton';
+import ViewTypeGrid from './viewTypes/ViewTypeGrid';
+import ViewTypeList from './viewTypes/ViewTypeList';
 import ModalView from './ModalView';
+import { TextImageButton } from './buttons/TextImageButton';
 
 class FileExplorer extends Component {
 
@@ -29,7 +32,7 @@ class FileExplorer extends Component {
 
         this.state = {
             viewType: VIEW_TYPE_GRID,
-            mode: NORMAL_MODE,
+            mode: NORMAL_MODE
             // pathArray: [
             //     {id:'root', name:'root'}
             // ],
@@ -124,6 +127,33 @@ class FileExplorer extends Component {
 
     }
 
+    onNextPage(){
+
+        var path = this.props.pathArray[this.props.pathArray.length - 1];
+        var offset = this.props.offset + 5;
+
+        this.props.fetchFiles({
+            fileId: path.id,
+            name: path.name
+        }, offset);
+
+    }
+
+    onPreviousPage(){
+
+        var path = this.props.pathArray[this.props.pathArray.length - 1];
+        var offset = this.props.offset - 5;
+
+        if(offset < 0){
+            offset = 0;
+        }
+
+        this.props.fetchFiles({
+            fileId: path.id,
+            name: path.name
+        }, offset);
+    }
+
     render() {
 
         let modalElement;
@@ -137,12 +167,12 @@ class FileExplorer extends Component {
         }
 
         const pathElements = this.props.pathArray.map((ele, index) =>(
-            <PathElement key={ele.id} pathElement={ele} onPathElementClick={this.onPathElementClick.bind(this)}></PathElement>
+            <PathElement key={index} pathElement={ele} onPathElementClick={this.onPathElementClick.bind(this)}></PathElement>
         ));
 
         const menuElements = this.props.pathArray.map((ele, index) =>(
-            <MenuItem eventKey={ele.id}>
-                <PathElement key={ele.id} pathElement={ele} onPathElementClick={this.onPathElementClick.bind(this)}></PathElement>
+            <MenuItem eventKey={index}>
+                <PathElement pathElement={ele} onPathElementClick={this.onPathElementClick.bind(this)}></PathElement>
             </MenuItem>
         ));
 
@@ -166,6 +196,24 @@ class FileExplorer extends Component {
                 break;
         }
 
+        let previousButton
+        if(this.props.offset > 0){
+            previousButton = <TextImageButton text={"Previous"} iconPosition={"left"} imageSrc={backIcon} onButtonClick={this.onPreviousPage.bind(this)}></TextImageButton>
+        }
+
+        let nextButton
+        if(this.props.files.length >= 5){
+            nextButton = <TextImageButton text={"Next"} iconPosition={"right"} imageSrc={nextIcon} onButtonClick={this.onNextPage.bind(this)}></TextImageButton>
+        }
+
+        let fileButtons;
+        if(this.props.fileSelected && this.props.fileSelected.fileId){
+            fileButtons = <div className="file-buttons">
+                            <ImageButton imageSrc={editIcon} onButtonClick={this.onEditNameClick.bind(this)}></ImageButton>
+                            <ImageButton imageSrc={removeIcon} onButtonClick={this.onRemoveFolderClick.bind(this)}></ImageButton>
+                        </div>
+        }
+
         return (
             <div className="file-explorer-component">
 
@@ -187,9 +235,7 @@ class FileExplorer extends Component {
                         {viewTypeButton}
                         <ImageButton imageSrc={createFileIcon} onButtonClick={this.onCreateFileClick.bind(this)}></ImageButton>
                         <ImageButton imageSrc={createFolderIcon} onButtonClick={this.onCreateFolderClick.bind(this)}></ImageButton>
-                        <ImageButton imageSrc={editIcon} onButtonClick={this.onEditNameClick.bind(this)}></ImageButton>
-                        <ImageButton imageSrc={removeIcon} onButtonClick={this.onRemoveFolderClick.bind(this)}></ImageButton>
-                    
+                        {fileButtons}
                     </div>
                 </div>
 
@@ -198,7 +244,13 @@ class FileExplorer extends Component {
                 </div>
 
                 <div className="pagination-container">
+                    <div className="previous-button">
+                        {previousButton}    
+                    </div>
                     
+                    <div className="next-button">
+                        {nextButton}
+                    </div>
                 </div>
 
                 {modalElement}
@@ -218,7 +270,8 @@ const mapStateToProps = function(state){
     return {
         files: state.filesReducer.files,
         pathArray: state.filesReducer.pathArray,
-        fileSelected: state.filesReducer.fileSelected
+        fileSelected: state.filesReducer.fileSelected,
+        offset: state.filesReducer.offset
     }
 }
 

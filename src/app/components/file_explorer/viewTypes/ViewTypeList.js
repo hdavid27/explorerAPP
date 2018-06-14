@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import { PropTypes } from 'prop-types';
 
-import FileTypeList from './FileTypeList';
+import FileTypeList from './../fileTypes/FileTypeList';
 
 export default class ViewTypeList extends Component {
 

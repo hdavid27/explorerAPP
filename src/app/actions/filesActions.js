@@ -19,7 +19,8 @@ export function fetchFiles(fileFolder, offset){
             type: FETCH_FILES,
             status: data.status,
             payload: data.payload,
-            parentFolder: fileFolder
+            parentFolder: fileFolder,
+            offset: offset
         }));
     }
 }
