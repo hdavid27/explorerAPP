@@ -129,21 +129,33 @@ p
                 align-items: center
                 padding: 10px 10px
 
+                &.selected
+                    background-color: #E8F0FE
+
                 &.header
                     cursor: auto 
 
                 .file-name
                     width: 60%
+                    display: flex
+                    justify-content: flex-start
+                    align-items: center
+
+                    img
+                        padding-right: 10px
 
                 .file-date
-                    width: 40%
+                    width: 30%
+                    display: flex
+                    justify-content: flex-start
+                    align-items: center
 
-                img
-                    padding-right: 10px
+                .file-aproved
+                    display: flex
+                    width: 10%
+                    justify-content: center
+                    align-items: center
 
-                &.selected
-                    background-color: #E8F0FE
-                
 
         .view-type-grid
             width: 100%
@@ -162,18 +174,24 @@ p
                 border: 1px solid #aaaaaa
                 border-radius: 10px
                 flex-direction: row
-                justify-content: flex-start
+                justify-content: space-between
                 align-items: center
                 cursor: pointer
+
+                &.selected
+                    background-color: #E8F0FE
 
                 @media screen and (max-width: 450px)
                     width: 100%
 
-                img
-                    padding-right: 10px
+                .left-container
+
+                    img
+                        padding-right: 10px
+
+                .right-container
                     
-                &.selected
-                    background-color: #E8F0FE
+
 
     .pagination-container
         height: 50px

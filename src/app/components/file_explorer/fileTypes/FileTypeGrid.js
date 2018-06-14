@@ -7,6 +7,9 @@ import { setSelectedFile, fetchFiles } from '../../../actions/filesActions';
 import folderIcon from './../../../../assets/images/icon-folder-black.svg'
 import fileIcon from './../../../../assets/images/icon-file-black.svg'
 
+import rejectIcon from './../../../../assets/images/icon-reject-black.svg';
+import aprovedIcon from './../../../../assets/images/icon-aprove-black.svg';
+
 class FileTypeGrid extends Component {
 
     constructor(props){
@@ -29,10 +32,24 @@ class FileTypeGrid extends Component {
         
         const selected = (this.props.fileSelected && this.props.fileSelected.fileId == this.props.file.fileId) ? 'selected' : '';
 
+        let icon;
+        if(this.props.file.aproved == 'true'){
+            icon = <img src={aprovedIcon} /> 
+        }
+
+        if(this.props.file.aproved == 'false'){
+            icon = <img src={rejectIcon} /> 
+        }
+
         return (
             <div className={"file-type-grid " + selected} onClick={this.onFileClick.bind(this)}>
-                <img src={(this.props.file.type == 'folder')? folderIcon : fileIcon} />
-                {this.props.file.name}
+                <div className="left-container">
+                    <img src={(this.props.file.type == 'folder')? folderIcon : fileIcon} />
+                    {this.props.file.name}
+                </div>
+                <div className="right-container">
+                    {icon}
+                </div>
             </div>
         )
     }

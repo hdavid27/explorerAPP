@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 
-import { fetchFiles, createFile, updateFile, deleteFile } from './../../actions/filesActions';
+import { fetchFiles, createFile, updateFile, deleteFile, aproveFile } from './../../actions/filesActions';
 import { VIEW_TYPE_GRID, VIEW_TYPE_LIST, NORMAL_MODE, EDIT_MODE, CREATE_FILE_MODE, CREATE_FOLDER_MODE } from './../../actions/types';
 
 //icons
@@ -16,6 +16,8 @@ import viewGridIcon from './../../../assets/images/icon-view-grid-back.svg';
 import viewListIcon from './../../../assets/images/icon-view-list-black.svg';
 import nextIcon from './../../../assets/images/icon-forward-black.svg';
 import backIcon from './../../../assets/images/icon-back-black.svg';
+import rejectIcon from './../../../assets/images/icon-reject-black.svg';
+import aproveIcon from './../../../assets/images/icon-aprove-black.svg';
 
 
 import PathElement from './PathElement';
@@ -77,6 +79,20 @@ class FileExplorer extends Component {
             this.setState({
                 mode: EDIT_MODE
             });
+        }
+    }
+
+    onAproveFile(){
+        console.log('onAproveFile');
+        if(this.props.fileSelected && this.props.fileSelected.fileId){
+            this.props.aproveFile(this.props.fileSelected.fileId, 'true')
+        }
+    }
+
+    onRejectFile(){
+        console.log('onRejectFile');
+        if(this.props.fileSelected && this.props.fileSelected.fileId){
+            this.props.aproveFile(this.props.fileSelected.fileId, 'false')
         }
     }
 
@@ -209,6 +225,8 @@ class FileExplorer extends Component {
         let fileButtons;
         if(this.props.fileSelected && this.props.fileSelected.fileId){
             fileButtons = <div className="file-buttons">
+                            <ImageButton imageSrc={aproveIcon} onButtonClick={this.onAproveFile.bind(this)}></ImageButton>
+                            <ImageButton imageSrc={rejectIcon} onButtonClick={this.onRejectFile.bind(this)}></ImageButton>
                             <ImageButton imageSrc={editIcon} onButtonClick={this.onEditNameClick.bind(this)}></ImageButton>
                             <ImageButton imageSrc={removeIcon} onButtonClick={this.onRemoveFolderClick.bind(this)}></ImageButton>
                         </div>
@@ -275,4 +293,4 @@ const mapStateToProps = function(state){
     }
 }
 
-export default connect(mapStateToProps, {fetchFiles, createFile, updateFile, deleteFile} )(FileExplorer);
+export default connect(mapStateToProps, {fetchFiles, createFile, updateFile, deleteFile, aproveFile} )(FileExplorer);

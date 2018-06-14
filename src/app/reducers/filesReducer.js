@@ -1,5 +1,5 @@
 
-import { FETCH_FILES, CREATE_FILE, UPDATE_FILE, DELETE_FILE, SET_SELECTED_FILE} from './../actions/types';
+import { FETCH_FILES, CREATE_FILE, UPDATE_FILE, DELETE_FILE, SET_SELECTED_FILE, APROVE_FILE} from './../actions/types';
 
 const initialState = {
     files: [],
@@ -115,6 +115,26 @@ export default function(state = initialState, action) {
                 pathArray: state.pathArray,
                 offset: state.offset
             };
+
+        case APROVE_FILE:
+            console.log('APROVE_FILE: ' + action.status);
+
+            if(action.status <= 300){
+                var array = state.files.map(function(file){
+                    if(file.fileId == action.fileId){
+                        file.aproved = action.aproved
+                    }
+                    return file;
+                });
+                return {
+                    files: array,
+                    fileSelected: {},
+                    pathArray: state.pathArray,
+                    offset: state.offset
+                };
+            }else{
+                return state;
+            }
 
         default:
             return state;

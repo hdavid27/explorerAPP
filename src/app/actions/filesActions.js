@@ -1,5 +1,5 @@
 
-import { FETCH_FILES, CREATE_FILE, UPDATE_FILE, DELETE_FILE, SET_SELECTED_FILE} from './types';
+import { FETCH_FILES, CREATE_FILE, UPDATE_FILE, DELETE_FILE, SET_SELECTED_FILE, APROVE_FILE} from './types';
 import { config } from './../../config';
 
 export function fetchFiles(fileFolder, offset){
@@ -120,4 +120,33 @@ export function setSelectedFile(file){
 
     }
     
+}
+
+export function aproveFile(fileId, aproved){
+    console.log('Aproving: ', fileId, aproved);
+    
+    var body = {
+        aproved : aproved
+    };
+
+    return function(dispatch){
+        fetch(config.API_HOST + '/files/aprove/' + fileId,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }).then(function(res){
+            return res.json().then(function(data){
+                return {status: res.status, payload: data};
+            })
+        })
+        .then(data => dispatch({
+            type: APROVE_FILE,
+            status: data.status,
+            payload: data.payload,
+            fileId: fileId,
+            aproved: aproved
+        }))
+    }
 }

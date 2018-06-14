@@ -41,6 +41,9 @@ export default class ViewTypeList extends Component {
                     <div className="file-date">
                         <b>Last modified</b>
                     </div>
+                    <div className="file-aproved">
+                        <b>Aproved</b>
+                    </div>
                 </div>
                 {files}
             </div>
