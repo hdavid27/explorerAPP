@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "webpack-dev-server --open --hot --config webpack.common.js",
+    "start": "webpack-dev-server --open --hot --config webpack.common.js --mode development",
     "build": "webpack --config webpack.prod.js"
   },
   "repository": {
