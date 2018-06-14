@@ -23,7 +23,7 @@
     margin-right: 20px
 
     b
-        padding-right: 10px
+        padding-right: 5px
     
     p
         margin: 0
@@ -55,6 +55,24 @@
         .path-container
             display: flex
             flex-direction: row
+
+            .small-menu
+                display: none
+
+                button
+                    background-color: transparent
+                    border: none 
+
+            .normal-menu
+                display: flex
+                flex-direction: row
+
+            @media screen and (max-width: 1200px)
+                .small-menu
+                    display: flex
+
+                .normal-menu
+                    display: none
 
         .icons-container
             display: flex

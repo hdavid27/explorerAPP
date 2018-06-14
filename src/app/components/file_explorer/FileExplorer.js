@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
 
 import { fetchFiles, createFile, updateFile, deleteFile } from './../../actions/filesActions';
 import { VIEW_TYPE_GRID, VIEW_TYPE_LIST, NORMAL_MODE, EDIT_MODE, CREATE_FILE_MODE, CREATE_FOLDER_MODE } from './../../actions/types';
@@ -136,7 +137,13 @@ class FileExplorer extends Component {
         }
 
         const pathElements = this.props.pathArray.map((ele, index) =>(
-            <PathElement key={ele.id} pathElement={ele} selectedClass={(index == this.props.pathArray.length -1) ? "selected" : ""} onPathElementClick={this.onPathElementClick.bind(this)}></PathElement>
+            <PathElement key={ele.id} pathElement={ele} onPathElementClick={this.onPathElementClick.bind(this)}></PathElement>
+        ));
+
+        const menuElements = this.props.pathArray.map((ele, index) =>(
+            <MenuItem eventKey={ele.id}>
+                <PathElement key={ele.id} pathElement={ele} onPathElementClick={this.onPathElementClick.bind(this)}></PathElement>
+            </MenuItem>
         ));
 
         var viewTypeElement;
@@ -164,7 +171,17 @@ class FileExplorer extends Component {
 
                 <div className="explorer-nav">
                     <div className="path-container">
-                        {pathElements}
+                        <div className="small-menu">
+                            <DropdownButton
+                                title={"/  " + this.props.pathArray[this.props.pathArray.length - 1].name}
+                            >
+                                {menuElements}
+                            </DropdownButton>
+                        </div>
+                        <div className="normal-menu">
+                            {pathElements}
+                        </div>
+
                     </div>
                     <div className="icons-container">
                         {viewTypeButton}
