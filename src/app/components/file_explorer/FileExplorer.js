@@ -197,6 +197,10 @@ class FileExplorer extends Component {
                     {viewTypeElement}
                 </div>
 
+                <div className="pagination-container">
+                    
+                </div>
+
                 {modalElement}
             </div>
         )
