@@ -1,6 +1,7 @@
 
 import { FETCH_FILES, CREATE_FILE, UPDATE_FILE, DELETE_FILE, SET_SELECTED_FILE, APROVE_FILE} from './types';
 import { config } from './../../config';
+import axios from 'axios';
 
 export function fetchFiles(fileFolder, offset){
     var path = (fileFolder) ? fileFolder.fileId : 'root';
@@ -9,16 +10,11 @@ export function fetchFiles(fileFolder, offset){
     console.log('Feetching files for ' + path);
 
     return function(dispatch){
-        fetch(config.API_HOST + 'files/' + path + '/' + offset)
-        .then(function(res){
-            return res.json().then(function(data){
-                return {status: res.status, payload:data};
-            })
-        })
-        .then((data) => dispatch({
+        axios.get(config.API_HOST + 'files/' + path + '/' + offset)
+        .then((res) => dispatch({
             type: FETCH_FILES,
-            status: data.status,
-            payload: data.payload,
+            status: res.status,
+            payload: res.data,
             parentFolder: fileFolder,
             offset: offset
         }));
@@ -35,22 +31,18 @@ export function createFile(name, type, parent){
     };
 
     return function(dispatch){
-        fetch(config.API_HOST + 'files/', {
-            method: 'POST',
+        axios({
+            method: 'post',
+            url: config.API_HOST + 'files/',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            data: JSON.stringify(data)
         })
-        .then(function(res){
-            return res.json().then(function(data){
-                return {status: res.status, payload:data};
-            })
-        })
-        .then(data => dispatch({
+        .then(res => dispatch({
             type: CREATE_FILE,
-            status: data.status,
-            payload: data.payload
+            status: res.status,
+            payload: res.data
         }))
     }
 }
@@ -63,22 +55,18 @@ export function updateFile(fileId, name){
     };
 
     return function(dispatch){
-        fetch(config.API_HOST + 'files/' + fileId, {
-            method: 'POST',
+        axios({
+            method: 'post',
+            url: config.API_HOST + 'files/' + fileId,
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            data: JSON.stringify(data)
         })
-        .then(function(res){
-            return res.json().then(function(data){
-                return {status: res.status, payload:data};
-            })
-        })
-        .then(data => dispatch({
+        .then(res => dispatch({
             type: UPDATE_FILE,
-            status: data.status,
-            payload: data.payload,
+            status: res.status,
+            payload: res.data,
             fileId: fileId,
             newName: name
         }))
@@ -89,20 +77,17 @@ export function deleteFile(fileId){
     console.log('Deleting file');
 
     return function(dispatch){
-        fetch(config.API_HOST + 'files/' + fileId, {
-            method: 'DELETE',
+        axios({
+            method: 'delete',
+            url: config.API_HOST + 'files/' + fileId,
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(function(res){
-            return res.json().then(function(data){
-                return {status: res.status, payload:data};
-            })
         })
-        .then(data => dispatch({
+        .then(res => dispatch({
             type: DELETE_FILE,
-            status: data.status,
-            payload: data.payload,
+            status: res.status,
+            payload: res.data,
             fileId: fileId
         }))
     }
@@ -130,21 +115,18 @@ export function aproveFile(fileId, aproved){
     };
 
     return function(dispatch){
-        fetch(config.API_HOST + '/files/aprove/' + fileId,{
-            method: 'POST',
+        axios({
+            method: 'post',
+            url: config.API_HOST + '/files/aprove/' + fileId,
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(body)
-        }).then(function(res){
-            return res.json().then(function(data){
-                return {status: res.status, payload: data};
-            })
+            data: JSON.stringify(body)
         })
-        .then(data => dispatch({
+        .then(res => dispatch({
             type: APROVE_FILE,
-            status: data.status,
-            payload: data.payload,
+            status: res.status,
+            payload: res.data,
             fileId: fileId,
             aproved: aproved
         }))
