@@ -6,7 +6,7 @@ const initialState = {
     fileSelected: {},
     pathArray: [
         {id:'root', name:'root'}
-    ],
+    ]
 };
 
 export default function(state = initialState, action) {
@@ -14,38 +14,93 @@ export default function(state = initialState, action) {
     switch(action.type){
 
         case FETCH_FILES:
+        console.log('FETCH_FILES: ' + action.status, action.payload);
 
-            var array = state.pathArray;
+            if(action.status <= 300){
+                var array = state.pathArray;
 
-            if(action.parentFolder){
-                var filtered = false;
-                var array = state.pathArray.filter(function(path){
-                    if(path.id == action.parentFolder.fileId){
-                        filtered = !filtered;
-                        return true;
+                if(action.parentFolder){
+                    var filtered = false;
+                    var array = state.pathArray.filter(function(path){
+                        if(path.id == action.parentFolder.fileId){
+                            filtered = !filtered;
+                            return true;
+                        }
+                        return !filtered
+                    });
+
+                    if(!filtered){
+                        array.push({id:action.parentFolder.fileId, name: action.parentFolder.name});
                     }
-                    return !filtered
-                });
-
-                if(!filtered){
-                    array.push({id:action.parentFolder.fileId, name: action.parentFolder.name});
                 }
+
+                return {
+                    files: action.payload,
+                    fileSelected: {},
+                    pathArray: array
+                };
+            }else{
+                return state;
             }
 
-            return {
-                files: action.payload,
-                fileSelected: state.fileSelected,
-                pathArray: array
-            };
-
         case CREATE_FILE:
-            return state;
+            console.log('CREATE_FILE: ' + action.status, action.payload);
+            
+            if(action.status <= 300){
+                var array = state.files;
+                array.push(action.payload);
+
+                return {
+                    files: array,
+                    fileSelected: {},
+                    pathArray: state.pathArray
+                };
+            }else{
+                return {
+                    files: state.files,
+                    fileSelected: {},
+                    pathArray: state.pathArray
+                }; 
+            }
+            
 
         case UPDATE_FILE:
-            return state;
+            console.log('UPDATE_FILE: ' + action.status, action.payload);
+
+            if(action.status <= 300){
+                var array = state.files.map(function(file){
+                    if(file.fileId == action.fileId){
+                        file.name = action.newName
+                    }
+                    return file;
+                });
+                return {
+                    files: array,
+                    fileSelected: {},
+                    pathArray: state.pathArray
+                };
+            }else{
+                return state;
+            }
 
         case DELETE_FILE:
-            return state;
+            console.log('DELETE_FILE: ' + action.status, action.payload);
+
+            if(action.status <= 300){
+                var array = state.files.filter(function(file){
+                    if(file.fileId == action.fileId){
+                        return false;
+                    }
+                    return true;
+                });
+                return {
+                    files: array,
+                    fileSelected: {},
+                    pathArray: state.pathArray
+                };
+            }else{
+                return state;
+            }
 
         case SET_SELECTED_FILE:
             return {

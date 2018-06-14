@@ -23,9 +23,14 @@ export default class ViewTypeList extends Component {
     }
 
     render(){
-        const files = this.props.files.map((file, index) => (
-            <FileTypeList key={index} file={file} ></FileTypeList>
-        ));
+        let files;
+
+        if(this.props.files){
+            files = this.props.files.map((file, index) => (
+                <FileTypeList key={index} file={file} ></FileTypeList>
+            ));
+        }
+        
     
         return (
             <div className="view-type-list">

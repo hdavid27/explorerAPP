@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import { PropTypes } from 'prop-types';
 
-import { setSelectedFile } from '../../actions/filesActions';
-import { fetchFiles } from './../../actions/filesActions';
+import { setSelectedFile, fetchFiles } from '../../actions/filesActions';
 
 import folderIcon from './../../../assets/images/icon-folder-black.svg'
+import fileIcon from './../../../assets/images/icon-file-black.svg'
 
 class FileTypeGrid extends Component {
 
@@ -31,7 +31,7 @@ class FileTypeGrid extends Component {
 
         return (
             <div className={"file-type-grid " + selected} onClick={this.onFileClick.bind(this)}>
-                <img src={folderIcon} />
+                <img src={(this.props.file.type == 'folder')? folderIcon : fileIcon} />
                 {this.props.file.name}
             </div>
         )

@@ -1,14 +1,16 @@
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-import { fetchFiles } from './../../actions/filesActions';
-import { VIEW_TYPE_GRID, VIEW_TYPE_LIST } from './../../actions/types';
+import { fetchFiles, createFile, updateFile, deleteFile } from './../../actions/filesActions';
+import { VIEW_TYPE_GRID, VIEW_TYPE_LIST, NORMAL_MODE, EDIT_MODE, CREATE_FILE_MODE, CREATE_FOLDER_MODE } from './../../actions/types';
 
 //icons
 import removeIcon from './../../../assets/images/icon-remove-black.svg';
-import createIcon from './../../../assets/images/icon-create-folder-black.svg';
+import editIcon from './../../../assets/images/icon-edit-black.svg'
+import createFileIcon from './../../../assets/images/icon-add-file-black.svg';
+import createFolderIcon from './../../../assets/images/icon-create-folder-black.svg';
 import viewGridIcon from './../../../assets/images/icon-view-grid-back.svg';
 import viewListIcon from './../../../assets/images/icon-view-list-black.svg';
 
@@ -17,6 +19,7 @@ import PathElement from './PathElement';
 import { ImageButton } from './ImageButton';
 import ViewTypeGrid from './ViewTypeGrid';
 import ViewTypeList from './ViewTypeList';
+import ModalView from './ModalView';
 
 class FileExplorer extends Component {
 
@@ -24,7 +27,8 @@ class FileExplorer extends Component {
         super(props);
 
         this.state = {
-            viewType: VIEW_TYPE_GRID
+            viewType: VIEW_TYPE_GRID,
+            mode: NORMAL_MODE,
             // pathArray: [
             //     {id:'root', name:'root'}
             // ],
@@ -38,20 +42,38 @@ class FileExplorer extends Component {
     }
 
     componentWillReceiveProps(nextProps){
-        // this.setState({
-        //     files: nextProps.files
-        // })
-    }
 
+    }
 
     onRemoveFolderClick(e){
         console.log('onRemoveFolderClick');
+        if(this.props.fileSelected && this.props.fileSelected.fileId){
+            this.props.deleteFile(this.props.fileSelected.fileId);
+        }
         
     }
 
     onCreateFolderClick(e){
         console.log('onCreateFolderClick');
+        this.setState({
+            mode: CREATE_FOLDER_MODE
+        })
+    }
 
+    onCreateFileClick(e){
+        console.log('onCreateFileClick');
+        this.setState({
+            mode: CREATE_FILE_MODE
+        })
+    }
+
+    onEditNameClick(e){
+        console.log('onEditNameClick');
+        if(this.props.fileSelected && this.props.fileSelected.fileId){
+            this.setState({
+                mode: EDIT_MODE
+            });
+        }
     }
 
     onPathElementClick(id, name){
@@ -72,18 +94,46 @@ class FileExplorer extends Component {
 
     }
 
-    onFolderClick(file){
-        // var array = this.state.pathArray;
-        // array.push({id:file.fileId, name: file.name});
+    onModalClose(){
+        this.setState({
+            mode: NORMAL_MODE
+        })
+    }
 
-        // this.setState({
-        //     pathArray: array
-        // });
+    onModalSave(mode, inputValue){
 
-        // this.searchFiles(array)
+        let length = this.props.pathArray.length
+
+        if(mode == CREATE_FILE_MODE){
+            this.props.createFile(inputValue, 'file', this.props.pathArray[length - 1].id);
+        }
+
+        if(mode == CREATE_FOLDER_MODE){
+            this.props.createFile(inputValue, 'folder', this.props.pathArray[length - 1].id);
+        }
+
+        if(mode == EDIT_MODE){
+            this.props.updateFile(this.props.fileSelected.fileId, inputValue);
+        }
+
+        this.setState({
+            mode: NORMAL_MODE
+        })
+
+
     }
 
     render() {
+
+        let modalElement;
+
+        if(this.state.mode == CREATE_FILE_MODE || this.state.mode == CREATE_FOLDER_MODE){
+            modalElement = <ModalView mode={this.state.mode} onClose={this.onModalClose.bind(this)} onSave={this.onModalSave.bind(this)}></ModalView>
+        }
+
+        if(this.state.mode == EDIT_MODE){
+            modalElement = <ModalView mode={this.state.mode} value={(this.props.fileSelected.name) ? this.props.fileSelected.name : ''} onClose={this.onModalClose.bind(this)} onSave={this.onModalSave.bind(this)}></ModalView>
+        }
 
         const pathElements = this.props.pathArray.map((ele, index) =>(
             <PathElement key={ele.id} pathElement={ele} selectedClass={(index == this.props.pathArray.length -1) ? "selected" : ""} onPathElementClick={this.onPathElementClick.bind(this)}></PathElement>
@@ -111,13 +161,16 @@ class FileExplorer extends Component {
 
         return (
             <div className="file-explorer-component">
+
                 <div className="explorer-nav">
                     <div className="path-container">
                         {pathElements}
                     </div>
                     <div className="icons-container">
                         {viewTypeButton}
-                        <ImageButton imageSrc={createIcon} onButtonClick={this.onCreateFolderClick.bind(this)}></ImageButton>
+                        <ImageButton imageSrc={createFileIcon} onButtonClick={this.onCreateFileClick.bind(this)}></ImageButton>
+                        <ImageButton imageSrc={createFolderIcon} onButtonClick={this.onCreateFolderClick.bind(this)}></ImageButton>
+                        <ImageButton imageSrc={editIcon} onButtonClick={this.onEditNameClick.bind(this)}></ImageButton>
                         <ImageButton imageSrc={removeIcon} onButtonClick={this.onRemoveFolderClick.bind(this)}></ImageButton>
                     
                     </div>
@@ -126,6 +179,8 @@ class FileExplorer extends Component {
                 <div className="explorer-container">
                     {viewTypeElement}
                 </div>
+
+                {modalElement}
             </div>
         )
     }
@@ -141,8 +196,9 @@ const mapStateToProps = function(state){
     console.log('STATE', state);
     return {
         files: state.filesReducer.files,
-        pathArray: state.filesReducer.pathArray
+        pathArray: state.filesReducer.pathArray,
+        fileSelected: state.filesReducer.fileSelected
     }
 }
 
-export default connect(mapStateToProps, {fetchFiles} )(FileExplorer);
+export default connect(mapStateToProps, {fetchFiles, createFile, updateFile, deleteFile} )(FileExplorer);

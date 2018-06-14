@@ -24,10 +24,13 @@ export default class ViewTypeGrid extends Component {
     }
 
     render(){
+        let files;
 
-        const files = this.props.files.map((file, index) => (
-            <FileTypeGrid key={index} file={file} ></FileTypeGrid>
-        ));
+        if(this.props.files){
+            files = this.props.files.map((file, index) => (
+                <FileTypeGrid key={index} file={file} ></FileTypeGrid>
+            ));
+        }
         
         return (
             <div className="view-type-grid">

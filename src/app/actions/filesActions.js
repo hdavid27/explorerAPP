@@ -9,17 +9,22 @@ export function fetchFiles(fileFolder){
 
     return function(dispatch){
         fetch(config.API_HOST + 'files/' + path)
-        .then(res => res.json())
-        .then(files => dispatch({
+        .then(function(res){
+            return res.json().then(function(data){
+                return {status: res.status, payload:data};
+            })
+        })
+        .then((data) => dispatch({
             type: FETCH_FILES,
-            payload: files,
+            status: data.status,
+            payload: data.payload,
             parentFolder: fileFolder
         }));
     }
 }
 
 export function createFile(name, type, parent){
-    console.log('Creating file');
+    console.log('Creating file', name, type, parent);
 
     var data = {
         name : name,
@@ -31,14 +36,19 @@ export function createFile(name, type, parent){
         fetch(config.API_HOST + 'files/', {
             method: 'POST',
             headers: {
-                'content-type': 'aplication/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         })
-        .then(res => res.json())
-        .then(file => dispatch({
+        .then(function(res){
+            return res.json().then(function(data){
+                return {status: res.status, payload:data};
+            })
+        })
+        .then(data => dispatch({
             type: CREATE_FILE,
-            payload: file
+            status: data.status,
+            payload: data.payload
         }))
     }
 }
@@ -54,14 +64,21 @@ export function updateFile(fileId, name){
         fetch(config.API_HOST + 'files/' + fileId, {
             method: 'POST',
             headers: {
-                'content-type': 'aplication/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         })
-        .then(res => res.json())
-        .then(result => dispatch({
+        .then(function(res){
+            return res.json().then(function(data){
+                return {status: res.status, payload:data};
+            })
+        })
+        .then(data => dispatch({
             type: UPDATE_FILE,
-            payload: result
+            status: data.status,
+            payload: data.payload,
+            fileId: fileId,
+            newName: name
         }))
     }
 }
@@ -73,13 +90,18 @@ export function deleteFile(fileId){
         fetch(config.API_HOST + 'files/' + fileId, {
             method: 'DELETE',
             headers: {
-                'content-type': 'aplication/json'
+                'Content-Type': 'application/json'
             }
+        }).then(function(res){
+            return res.json().then(function(data){
+                return {status: res.status, payload:data};
+            })
         })
-        .then(res => res.json())
-        .then(result => dispatch({
+        .then(data => dispatch({
             type: DELETE_FILE,
-            payload: result
+            status: data.status,
+            payload: data.payload,
+            fileId: fileId
         }))
     }
 }
