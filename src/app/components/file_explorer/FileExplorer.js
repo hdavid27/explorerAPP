@@ -44,6 +44,7 @@ class FileExplorer extends Component {
     }
 
     componentWillMount(){
+        console.log('componentWillMount');
         this.props.fetchFiles();
     }
 
@@ -187,7 +188,7 @@ class FileExplorer extends Component {
         ));
 
         const menuElements = this.props.pathArray.map((ele, index) =>(
-            <MenuItem eventKey={index}>
+            <MenuItem key={index} eventKey={index}>
                 <PathElement pathElement={ele} onPathElementClick={this.onPathElementClick.bind(this)}></PathElement>
             </MenuItem>
         ));
@@ -237,14 +238,15 @@ class FileExplorer extends Component {
 
                 <div className="explorer-nav">
                     <div className="path-container">
-                        <div className="small-menu">
+                        <div className="small-menu" style={(this.props.pathArray.length > 5) ? {display:'flex'}: {}}>
                             <DropdownButton
+                                id="path-dropdown"
                                 title={"/  " + this.props.pathArray[this.props.pathArray.length - 1].name}
                             >
                                 {menuElements}
                             </DropdownButton>
                         </div>
-                        <div className="normal-menu">
+                        <div className="normal-menu" style={(this.props.pathArray.length > 5) ? {display:'none'}: {}}>
                             {pathElements}
                         </div>
 
