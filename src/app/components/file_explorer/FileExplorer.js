@@ -108,9 +108,16 @@ class FileExplorer extends Component {
 
     onViewTypeClick(){
 
-        this.setState({
+        //wrong way
+        // this.setState({
+        //     viewType: (this.state.viewType == VIEW_TYPE_GRID) ? VIEW_TYPE_LIST : VIEW_TYPE_GRID
+        // });
+
+        //correct way
+        //to be async
+        this.setState(() => ({
             viewType: (this.state.viewType == VIEW_TYPE_GRID) ? VIEW_TYPE_LIST : VIEW_TYPE_GRID
-        });
+        }));
 
     }
 
