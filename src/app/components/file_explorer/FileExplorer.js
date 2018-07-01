@@ -116,8 +116,8 @@ class FileExplorer extends Component {
 
         //correct way
         //to be async
-        this.setState(() => ({
-            viewType: (this.state.viewType == VIEW_TYPE_GRID) ? VIEW_TYPE_LIST : VIEW_TYPE_GRID
+        this.setState((prevState, props) => ({
+            viewType: (prevState.viewType == VIEW_TYPE_GRID) ? VIEW_TYPE_LIST : VIEW_TYPE_GRID
         }));
 
     }
